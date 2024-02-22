@@ -1,0 +1,23 @@
+If I would like to run this "server" locally, I'd need to run the nodejs app file ( $ node app.mjs), but before I'd need to run > npm install package.json; that will install all dependencies listed on the json file.
+Of course I'd need to install nodejs in my computer, beforehand 
+
+
+
+$ docker build .   > > Creates the docker image 
+
+$ docker run -p 3000:3000 <dockerID>     >> This sets the port (-p) 3000 as listener, you need to include the docker id given at the moment of the creation of the container
+
+$ docker ps   >> Shows all containers and ther names 
+
+$ docker stop <containerName>  >> stops container
+
+$docker ps -a  >> ps = process -a = all  >> Shows all processes
+
+$docker run -it node  >>  -it (interactive)  node (could be django, .net , flask etx ) This interactive shell is running on the container itself, no in the host machine
+
+
+Anonymous Volume, a volume without name
+
+Named volume, xd
+
+Bind mount, a volume that is mapped from outside the app to the inside

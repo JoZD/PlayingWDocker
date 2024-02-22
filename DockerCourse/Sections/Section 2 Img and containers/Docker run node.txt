@@ -1,0 +1,1 @@
+Docker run node >> this starts a container based on the node image 

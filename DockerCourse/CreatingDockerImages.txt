@@ -1,0 +1,91 @@
+$FROM node  >> This is like telling docker, from ducker hub copy node 
+
+$WORKDIR /app >> This tells docker, forces that all later commands will be run there, in the /app folder not the root, this also affects COPY
+
+$COPY . . >> First dot reffers to the parent local directory, which copies all files (and subfolders, but not the docker file) where the Dockerfile is stored 
+
+$COPY . /app >> Since we used WORKDIR this command can be replaced with COPY . ./ >> The relative path ./ points to /app
+copies all files, into a folder named /app within the container, note that the filesystem within the container is different that the local one, and they are alike
+
+
+
+
+$ RUN npm install  > This runs the command needed to install dependencies, this will be run on root, we user WORKDIR to tell docker to run from another directory
+
+$ EXPOSE 80  > this command needs to match the port listed on node.js app (this is optional, as when we run the command we need to specify the exposed port, however; best practice to include it) 
+
+NOTE: RUN VS CMD ? Run will be executed from the template(image) to the creation of the container, we can't run a server at the moment of the creation of the container, instead we use CMD
+means that the command needs to be run, when the container is already created
+
+
+$ CMD ["node", "server.js"]
+
+
+
+Note: This is just a basic template, is not an image yet
+
+docker build .  >> This build the image, the dot indicates that the directory where the docker file is contained, is the current one
+
+docker run containerID > starts the container created without exposed ports 
+
+Note: Afther this, the console will be froze, because it runs CMD["node", "server.js"] starts a new server that is online (this is called attached mode) the attached mode can be prevented with the following: docker run -p 3000:80 -d imageID >> -d means deattached (if you want to attch it after deattach, without running again >> docker attach CONTAINERIDORNAME
+
+$ docker run -p 3000:80 > Expose the port >> 3000 is up to you, but the 80, is the one that you specified in the docker file
+
+
+$ docker run -d --name proxy -p 8080:80 nginx (corro un nginx y expongo el puerto 80 del contenedor en el puerto 8080 de mi máquina) 
+
+
+
+
+
+
+FROM node 
+
+WORKDIR /app
+
+COPY package.json app/
+
+RUN npm install 
+
+COPY . /app
+
+EXPOSE 80
+
+CMD ["node", "server.js"]
+
+
+The code above is a refactorized one, this case; we copy the package json and npm install before copy app, becasue that way, next time we re-build, it will only
+change the source code, nothing else (unless you change the package.json or if it needs to re install npm) 
+
+
+DELETING CONTAINERS 
+
+docker rm containerName
+
+ docker images  > show images
+docker rm IMAGEID > deletes images
+
+docker run -p 3000:80 -d --rm imageID > This starts the container, but as soon as you stop it, it wil lbe also deleted
+
+docker image inspect Imageid > Details of the image
+
+
+------------------------COPY FILES IN A RUNNING CONTAINER ----------------------------------------------------------------------------------------------------
+
+docker cp folderName/. (dot can be replaced by the specific file) NameOfContainer:/targetFolder (if that does not exist it will be created)
+docker cp containErname:/targetFolder          Exctract from container 
+
+----------------------------------NAMING CONTAINER ---------------------------------------
+
+docker run -p 3000:80 -d --rm --name yourName imageID  --
+
+
+------------------------------------------- Pushin images to docker hub ----------------------------------------------
+
+docker build -t yourTag >> this creates a image with own tag  (or docker tag currenttag newrepositoryname:tag(optional) >> rename the tag  NOTE: the tag must match all the name of the repository in docker hub  >>$ docker push repository/imagename:tag(optional)
+
+
+
+
+

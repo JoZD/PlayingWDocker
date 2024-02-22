@@ -1,0 +1,7 @@
+docker container run -it > Interactive 
+
+docker container exec -it 
+
+
+docker container run -it --name proxy nginx bash >> Opens a bash into the container, logged as root (enter "exit" to log out)
+
